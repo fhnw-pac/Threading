@@ -36,7 +36,7 @@ int par(int* data, int size) {
 	// ...
 
 
-	// TODO yield the threads after the work is done
+	// TODO join the threads after the work is done
 	// ...
 
 	for (int i = 0; i < NO_OF_CORES; ++i) {
