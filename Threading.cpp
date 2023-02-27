@@ -6,8 +6,6 @@
 #define SEARCHNUMBER	42
 #define NO_OF_CORES		8
 
-using namespace std;
-
 int seq(int* data, int size) {
 	for (int i = 0; i < size; ++i) {
 		if (data[i] == SEARCHNUMBER) {
@@ -28,7 +26,7 @@ void searchPart(int* data, int from, int to, int* res) {
 
 int par(int* data, int size) {
 
-	thread threads[NO_OF_CORES];
+	std::thread threads[NO_OF_CORES];
 	int results[NO_OF_CORES];
 	memset(results, 0, NO_OF_CORES * sizeof(int));
 
@@ -54,9 +52,9 @@ int main() {
 	int* data = new int[size]; // 16M * 4B = 64MB
 
 	// random gen
-	default_random_engine generator;
-	uniform_int_distribution<int> distribution(0, size);
-	generator.seed(chrono::system_clock::now().time_since_epoch().count());
+	std::default_random_engine generator;
+	std::uniform_int_distribution<int> distribution(0, size);
+	generator.seed((unsigned)std::chrono::system_clock::now().time_since_epoch().count());
 
 	// fill data array with noise
 	for (size_t i = 0; i < size; ++i) {
@@ -71,13 +69,13 @@ int main() {
 
 		data[distribution(generator)] = SEARCHNUMBER;
 
-		auto start = chrono::high_resolution_clock::now();
+		auto start = std::chrono::high_resolution_clock::now();
 
 		int res = seq(data, size);
 
-		auto end = chrono::high_resolution_clock::now();
+		auto end = std::chrono::high_resolution_clock::now();
 
-		seqTime += (chrono::duration_cast<chrono::milliseconds>(end - start)).count();
+		seqTime += (std::chrono::duration_cast<std::chrono::milliseconds>(end - start)).count();
 		data[res] = 0;
 	}
 	seqTime /= n;
@@ -88,18 +86,18 @@ int main() {
 
 		data[distribution(generator)] = SEARCHNUMBER;
 
-		auto start = chrono::high_resolution_clock::now();
+		auto start = std::chrono::high_resolution_clock::now();
 
 		int res = par(data, size);
 
-		auto end = chrono::high_resolution_clock::now();
+		auto end = std::chrono::high_resolution_clock::now();
 
-		parTime += (chrono::duration_cast<chrono::milliseconds>(end - start)).count();
+		parTime += (std::chrono::duration_cast<std::chrono::milliseconds>(end - start)).count();
 		data[res] = 0;
 	}
 	parTime /= n;
 
-	cout << "seq time = " << seqTime << "ms" << endl;
-	cout << "par time = " << parTime << "ms" << endl;
-	cout << "speedup = " << seqTime / parTime << endl;
+	std::cout << "seq time = " << seqTime << "ms" << std::endl;
+	std::cout << "par time = " << parTime << "ms" << std::endl;
+	std::cout << "speedup = " << seqTime / parTime << std::endl;
 }
