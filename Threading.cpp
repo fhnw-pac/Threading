@@ -3,8 +3,8 @@
 #include <chrono>
 #include <thread>
 
-#define SEARCHNUMBER	42
-#define NO_OF_CORES		8
+constexpr int SEARCHNUMBER = 42;
+constexpr int NO_OF_CORES = 8;
 
 int seq(int* data, int size) {
 	for (int i = 0; i < size; ++i) {
@@ -42,7 +42,7 @@ int par(int* data, int size) {
 			return results[i];
 	}
 
-	return -1;
+	throw "NOT_FOUND";
 }
 
 int main() {
@@ -53,7 +53,7 @@ int main() {
 
 	// random gen
 	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution(0, size);
+	std::uniform_int_distribution<int> distribution(0, size - 1);
 	generator.seed((unsigned)std::chrono::system_clock::now().time_since_epoch().count());
 
 	// fill data array with noise
@@ -96,6 +96,9 @@ int main() {
 		data[res] = 0;
 	}
 	parTime /= n;
+
+	// cleanup
+	delete[] data;
 
 	std::cout << "seq time = " << seqTime << "ms" << std::endl;
 	std::cout << "par time = " << parTime << "ms" << std::endl;
