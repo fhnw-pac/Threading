@@ -28,7 +28,7 @@ int par(int* data, int size) {
 
 	std::thread threads[NO_OF_CORES];
 	int results[NO_OF_CORES];
-	memset(results, 0, NO_OF_CORES * sizeof(int));
+	memset(results, 0xFF, NO_OF_CORES * sizeof(int));
 
 	// TODO create and start the threads here
 	// ...
@@ -38,7 +38,7 @@ int par(int* data, int size) {
 	// ...
 
 	for (int i = 0; i < NO_OF_CORES; ++i) {
-		if (results[i] != 0)
+		if (results[i] != -1)
 			return results[i];
 	}
 
